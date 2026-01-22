@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Parking Management - Web</title>
+    <style>
+      :root {
+        --bg: #0b1020;
+        --panel: #0f162e;
+        --panel-2: #111939;
+        --text: #e7ecf8;
+        --muted: #9aa4bf;
+        --primary: #5b8cff;
+        --primary-600: #3f6df1;
+        --border: rgba(255,255,255,.08);
+        --success: #22c55e;
+        --warning: #f59e0b;
+      }
+      @media (prefers-color-scheme: light) {
+        :root {
+          --bg: #f7f8fc;
+          --panel: #ffffff;
+          --panel-2: #ffffff;
+          --text: #101322;
+          --muted: #495065;
+          --primary: #3f6df1;
+          --primary-600: #3359cc;
+          --border: rgba(0,0,0,.1);
+        }
+      }
+
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); }
+      .container { max-width: 1100px; margin: 0 auto; padding: 32px 20px 60px; }
+      header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+      .brand { display: flex; align-items: center; gap: 12px; }
+      .logo { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, var(--primary), #8aa7ff); display: grid; place-items: center; color: white; font-weight: 800; letter-spacing: .5px; }
+      .title { line-height: 1.1; margin: 0; font-size: 22px; }
+      .subtitle { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+
+      .grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px; }
+      @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+      .card { background: linear-gradient(180deg, var(--panel), var(--panel-2)); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: 0 6px 30px rgba(0,0,0,.18); }
+      .card h3 { margin: 0; padding: 14px 16px; font-size: 15px; letter-spacing: .3px; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0)); }
+      .card .content { padding: 14px; }
+
+      label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 13px; color: var(--muted); }
+      textarea { width: 100%; min-height: 260px; resize: vertical; background: rgba(255,255,255,.03); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 12px 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; outline: none; }
+      textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(91,140,255,.2); }
+
+      .controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+      .btn { background: var(--primary); color: white; border: 1px solid transparent; padding: 10px 16px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: .2s; }
+      .btn:hover { background: var(--primary-600); transform: translateY(-1px); }
+      .btn.secondary { background: transparent; color: var(--text); border-color: var(--border); }
+      .btn.secondary:hover { border-color: var(--primary); }
+      .file { padding: 8px 0; color: var(--muted); font-size: 13px; }
+
+      .flash { margin: 10px 0; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255, 193, 7, .35); background: rgba(255, 193, 7, .12); color: #ffd166; }
+
+      .output pre { background: #0a0f1d; border: 1px solid var(--border); color: #e4e8f5; padding: 16px; border-radius: 12px; overflow: auto; max-height: 420px; }
+      .output header { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0)); }
+      .muted { color: var(--muted); }
+
+      footer { margin-top: 28px; color: var(--muted); font-size: 12px; text-align: center; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="brand">
+          <div class="logo">P</div>
+          <div>
+            <h1 class="title">ParkingCo</h1>
+            <p class="subtitle">Smart parking infrastructure for modern campuses and facilities</p>
+          </div>
+        </div>
+        <nav class="muted" style="display:flex; gap:16px;">
+          <a href="#about" class="muted" style="text-decoration:none;">About</a>
+          <a href="#features" class="muted" style="text-decoration:none;">Features</a>
+          <a href="#console" class="muted" style="text-decoration:none;">Console</a>
+          <a href="#contact" class="muted" style="text-decoration:none;">Contact</a>
+        </nav>
+      </header>
+
+      <section id="hero" class="card" style="background: radial-gradient(1200px 500px at 10% -10%, rgba(91,140,255,.25), transparent), linear-gradient(180deg, var(--panel), var(--panel-2)); margin-bottom: 18px;">
+        <div class="content" style="display:grid; gap:10px; padding: 28px 18px;">
+          <h2 style="margin:0; font-size: 28px;">Orchestrate Parking, Effortlessly</h2>
+          <p style="margin:0; color: var(--muted); max-width: 820px;">From allocation to analytics — streamline your lot operations with a robust engine and beautiful operator tools. Try our live console below.</p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top: 8px;">
+            <a href="#console" class="btn" style="text-decoration:none;">Open Live Console</a>
+            <a href="#features" class="btn secondary" style="text-decoration:none;">Explore Features</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="card" style="margin-bottom: 18px;">
+        <h3>About ParkingCo</h3>
+        <div class="content">
+          <p class="muted" style="margin:0;">We build software that makes parking management simple, scalable, and delightful. Our engine assigns nearest-available slots, issues and reconciles tickets, and delivers insights for better capacity planning.</p>
+        </div>
+      </section>
+
+      <section id="features" class="card" style="margin-bottom: 18px;">
+        <h3>Key Features</h3>
+        <div class="content" style="display:grid; grid-template-columns: repeat(3,1fr); gap:14px;">
+          <div class="card" style="box-shadow:none;">
+            <div class="content">
+              <div style="font-size: 22px;">🚗</div>
+              <h4 style="margin: 8px 0 4px; font-size: 15px;">Smart Allocation</h4>
+              <p class="muted" style="margin:0;">Nearest-slot parking with instant availability updates.</p>
+            </div>
+          </div>
+          <div class="card" style="box-shadow:none;">
+            <div class="content">
+              <div style="font-size: 22px;">🧾</div>
+              <h4 style="margin: 8px 0 4px; font-size: 15px;">Ticketing & Audit</h4>
+              <p class="muted" style="margin:0;">Issue, return, and trace tickets with full audit trail.</p>
+            </div>
+          </div>
+          <div class="card" style="box-shadow:none;">
+            <div class="content">
+              <div style="font-size: 22px;">📊</div>
+              <h4 style="margin: 8px 0 4px; font-size: 15px;">Operational Insights</h4>
+              <p class="muted" style="margin:0;">Understand usage patterns to optimize capacity and flow.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <section id="console" class="grid">
+        <div class="card">
+          <h3>Input</h3>
+          <div class="content">
+            <form method="post" enctype="multipart/form-data">
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px; align-items: end;">
+                <div>
+                  <label for="location">Location</label>
+                  <select id="location" name="location" style="width:100%; background: rgba(255,255,255,.03); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 10px;">
+                    {% for loc in locations %}
+                      <option value="{{ loc.id }}" {% if selected_location == loc.id %}selected{% endif %}>{{ loc.name }} ({{ loc.capacity }} slots)</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="muted" style="font-size:13px;">
+                  Selecting a location will auto-set capacity via <code>Create_parking_lot</code>.
+                </div>
+              </div>
+              <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 10px; align-items: end;">
+                <div>
+                  <label for="vehicle_type">Vehicle Type</label>
+                  <select id="vehicle_type" name="vehicle_type" style="width:100%; background: rgba(255,255,255,.03); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 10px;">
+                    <option value="2w">2-Wheeler</option>
+                    <option value="4w" selected>4-Wheeler</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="reg_no">Registration No.</label>
+                  <input id="reg_no" name="reg_no" type="text" placeholder="KA-01-XX-1234" style="width:100%; background: rgba(255,255,255,.03); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 10px;" />
+                </div>
+                <div>
+                  <label for="driver_age">Driver Age</label>
+                  <input id="driver_age" name="driver_age" type="number" min="16" max="100" placeholder="21" style="width:100%; background: rgba(255,255,255,.03); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 10px;" />
+                </div>
+                <div>
+                  <button type="button" class="btn" onclick="appendParkLine()" style="width:100%;">Add Park line</button>
+                </div>
+              </div>
+              <label for="commands">Commands</label>
+              <textarea id="commands" name="commands" placeholder="Create_parking_lot 6
+Park KA-01-HH-1234 driver_age 21
+Park PB-01-HH-1234 driver_age 21
+Slot_numbers_for_driver_of_age 21
+Leave 2
+Vehicle_registration_number_for_driver_of_age 21
+" spellcheck="false">{{ input_text|default("", true) }}</textarea>
+
+              <div class="controls">
+                <div class="file">
+                  <label for="input_file" style="margin: 0 0 6px 0;">Or upload text file</label><br />
+                  <input type="file" id="input_file" name="input_file" accept="text/plain" />
+                </div>
+                <button type="submit" class="btn">Run</button>
+                <button type="button" class="btn secondary" onclick="fillSample()">Fill sample</button>
+                <button type="button" class="btn secondary" onclick="clearInput()">Clear</button>
+                <button type="button" class="btn secondary" onclick="appendSample('2w')">Add sample 2-Wheeler</button>
+                <button type="button" class="btn secondary" onclick="appendSample('4w')">Add sample 4-Wheeler</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="card output">
+          <header>
+            <div class="muted">Output</div>
+            <button class="btn secondary" onclick="copyOutput()">Copy</button>
+          </header>
+          <div class="content">
+            {% if output is not none %}
+              <pre id="outpre">{{ output }}</pre>
+            {% else %}
+              <pre id="outpre" class="muted">Run to see results here…</pre>
+            {% endif %}
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="card" style="margin-top: 18px;">
+        <h3>Contact</h3>
+        <div class="content" style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
+          <div class="muted">Have a question or need a demo?</div>
+          <a class="btn secondary" style="text-decoration:none;" href="mailto:hello@parkingco.example">hello@parkingco.example</a>
+        </div>
+      </section>
+
+      <footer>
+        © {{ 2025 }} ParkingCo. All rights reserved.
+      </footer>
+    </div>
+
+    <script>
+      function appendParkLine() {
+        const type = document.getElementById('vehicle_type').value;
+        let reg = (document.getElementById('reg_no').value || '').trim();
+        const age = (document.getElementById('driver_age').value || '').trim();
+        if (!reg) {
+          reg = type === '2w' ? 'TW-01-AB-1234' : 'KA-01-HH-1234';
+        }
+        if (!age) {
+          alert('Please enter driver age.');
+          return;
+        }
+        const line = `Park ${reg} driver_age ${age}`;
+        const ta = document.getElementById('commands');
+        const prefix = ta.value && !ta.value.endsWith('\n') ? '\n' : '';
+        ta.value = ta.value + prefix + line + '\n';
+        ta.focus();
+      }
+      function appendSample(kind) {
+        const ta = document.getElementById('commands');
+        const sample2 = 'Park TW-01-AB-1234 driver_age 20\n';
+        const sample4 = 'Park KA-01-HH-9999 driver_age 21\n';
+        const line = kind === '2w' ? sample2 : sample4;
+        const prefix = ta.value && !ta.value.endsWith('\n') ? '\n' : '';
+        ta.value = ta.value + prefix + line;
+        ta.focus();
+      }
+      function fillSample() {
+        const sample = `Create_parking_lot 6\nPark KA-01-HH-1234 driver_age 21\nPark PB-01-HH-1234 driver_age 21\nSlot_numbers_for_driver_of_age 21\nLeave 2\nVehicle_registration_number_for_driver_of_age 21\n`;
+        document.getElementById('commands').value = sample;
+        document.getElementById('commands').focus();
+      }
+      function clearInput() {
+        document.getElementById('commands').value = '';
+        document.getElementById('commands').focus();
+      }
+      function copyOutput() {
+        const pre = document.getElementById('outpre');
+        if (!pre) return;
+        const text = pre.innerText || '';
+        if (!text.trim()) return;
+        navigator.clipboard.writeText(text).then(() => {
+          const btns = document.getElementsByTagName('button');
+          // Brief visual feedback on the first button with text 'Copy'
+          for (const b of btns) {
+            if (b.textContent === 'Copy') {
+              const old = b.textContent; b.textContent = 'Copied!';
+              setTimeout(() => b.textContent = old, 1200);
+              break;
+            }
+          }
+        });
+      }
+    </script>
+  </body>
+  </html>
+
+
