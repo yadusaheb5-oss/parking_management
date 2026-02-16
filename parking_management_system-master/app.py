@@ -89,6 +89,10 @@ def exit_vehicle():
 
     return redirect(url_for("index"))
 
+@app.route("/bookings")
+def bookings():
+    global booking_history
+    return render_template("bookings.html", bookings=booking_history)
 
 
 # -----------------------------
