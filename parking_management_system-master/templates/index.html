@@ -1,84 +1,22 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Parking Management - Web</title>
-    <style>
-      :root {
-        --bg: #0b1020;
-        --panel: #0f162e;
-        --panel-2: #111939;
-        --text: #e7ecf8;
-        --muted: #9aa4bf;
-        --primary: #5b8cff;
-        --primary-600: #3f6df1;
-        --border: rgba(255,255,255,.08);
-        --success: #22c55e;
-        --warning: #f59e0b;
-      }
-      @media (prefers-color-scheme: light) {
-        :root {
-          --bg: #f7f8fc;
-          --panel: #ffffff;
-          --panel-2: #ffffff;
-          --text: #101322;
-          --muted: #495065;
-          --primary: #3f6df1;
-          --primary-600: #3359cc;
-          --border: rgba(0,0,0,.1);
-        }
-      }
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Smart Parking Dashboard</title>
 
-      * { box-sizing: border-box; }
-      body { margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); }
-      .container { max-width: 1100px; margin: 0 auto; padding: 32px 20px 60px; }
-      header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
-      .brand { display: flex; align-items: center; gap: 12px; }
-      .logo { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, var(--primary), #8aa7ff); display: grid; place-items: center; color: white; font-weight: 800; letter-spacing: .5px; }
-      .title { line-height: 1.1; margin: 0; font-size: 22px; }
-      .subtitle { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
-
-      .grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px; }
-      @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
-
-      .card { background: linear-gradient(180deg, var(--panel), var(--panel-2)); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: 0 6px 30px rgba(0,0,0,.18); }
-      .card h3 { margin: 0; padding: 14px 16px; font-size: 15px; letter-spacing: .3px; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0)); }
-      .card .content { padding: 14px; }
-
-      label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 13px; color: var(--muted); }
-      textarea { width: 100%; min-height: 260px; resize: vertical; background: rgba(255,255,255,.03); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 12px 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; outline: none; }
-      textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(91,140,255,.2); }
-
-      .controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
-      .btn { background: var(--primary); color: white; border: 1px solid transparent; padding: 10px 16px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: .2s; }
-      .btn:hover { background: var(--primary-600); transform: translateY(-1px); }
-      .btn.secondary { background: transparent; color: var(--text); border-color: var(--border); }
-      .btn.secondary:hover { border-color: var(--primary); }
-      .file { padding: 8px 0; color: var(--muted); font-size: 13px; }
-
-      .flash { margin: 10px 0; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255, 193, 7, .35); background: rgba(255, 193, 7, .12); color: #ffd166; }
-
-      .output pre { background: #0a0f1d; border: 1px solid var(--border); color: #e4e8f5; padding: 16px; border-radius: 12px; overflow: auto; max-height: 420px; }
-      .output header { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0)); }
-      .muted { color: var(--muted); }
-
-      footer { margin-top: 28px; color: var(--muted); font-size: 12px; text-align: center; }
-    </style>
-  </head>
-  <body>
-   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body body {
+body {
     margin:0;
     font-family:'Inter', sans-serif;
     background: linear-gradient(135deg, #eef2ff 0%, #f8fafc 100%);
     display:flex;
 }
 
-
+/* Sidebar */
 .sidebar {
     width:240px;
     background: linear-gradient(180deg, #ffffff, #f1f5ff);
@@ -86,7 +24,6 @@ body body {
     padding:25px;
     box-shadow: 4px 0 20px rgba(0,0,0,0.05);
 }
-
 
 .sidebar h2 {
     font-size:18px;
@@ -111,12 +48,13 @@ body body {
     transform:translateX(5px);
 }
 
-
+/* Main */
 .main {
     flex:1;
-    padding:30px;
+    padding:40px;
 }
 
+/* Cards */
 .cards {
     display:flex;
     gap:20px;
@@ -138,7 +76,7 @@ body body {
     box-shadow: 0 20px 45px rgba(79,70,229,0.15);
 }
 
-
+/* Button */
 .primary-btn {
     background: linear-gradient(135deg, #4f46e5, #6366f1);
     color:white;
@@ -156,15 +94,28 @@ body body {
     box-shadow: 0 12px 30px rgba(79,70,229,0.4);
 }
 
-
+/* Chart Box */
 .table {
     background:white;
-    margin-top:20px;
-    border-radius:12px;
-    padding:20px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.05);
+    margin-top:30px;
+    border-radius:18px;
+    padding:30px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.05);
 }
+
+/* Flash Messages */
+.flash {
+    margin:15px 0;
+    padding:12px;
+    border-radius:8px;
+    font-weight:600;
+}
+.success { background:#d1fae5; }
+.error { background:#fee2e2; }
 </style>
+</head>
+
+<body>
 
 <div class="sidebar">
     <h2>🚗 Smart Parking</h2>
@@ -174,55 +125,42 @@ body body {
 </div>
 
 <div class="main">
-    <h2>Welcome, Admin!</h2>
+    <h1>Welcome, Admin!</h1>
     <p>Manage parking slots efficiently.</p>
- {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    {% for category, message in messages %}
-      <div style="
-          margin:15px 0;
-          padding:12px;
-          border-radius:8px;
-          font-weight:600;
-          background-color:
-            {% if category == 'success' %}#d1fae5
-            {% elif category == 'error' %}#fee2e2
-            {% else %}#e0e7ff
-            {% endif %};
-          color:#111;
-      ">
-        {{ message }}
-      </div>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
 
-
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="flash {{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
 
     <button class="primary-btn" onclick="openModal()">Book Parking Slot</button>
 
- <div class="cards">
+    <div class="cards">
 
-    <div class="card">
-        <h4>🚗 Occupied Slots</h4>
-        <h1 style="color:#ef4444; font-size:42px;">{{ occupied }}</h1>
-        <p style="color:#9ca3af;">Currently parked vehicles</p>
+        <div class="card">
+            <h4>🚗 Occupied Slots</h4>
+            <h1 style="color:#ef4444; font-size:42px;">{{ occupied }}</h1>
+            <p style="color:#9ca3af;">Currently parked vehicles</p>
+        </div>
+
+        <div class="card">
+            <h4>🅿 Available Slots</h4>
+            <h1 style="color:#22c55e; font-size:42px;">{{ available }}</h1>
+            <p style="color:#9ca3af;">Free parking spaces</p>
+        </div>
+
+        <div class="card">
+            <h4>📊 Total Capacity</h4>
+            <h1 style="color:#4f46e5; font-size:42px;">{{ total_slots }}</h1>
+            <p style="color:#9ca3af;">Total slots available</p>
+        </div>
+
     </div>
-
-    <div class="card">
-        <h4>🅿 Available Slots</h4>
-        <h1 style="color:#22c55e; font-size:42px;">{{ available }}</h1>
-        <p style="color:#9ca3af;">Free parking spaces</p>
-    </div>
-
-    <div class="card">
-        <h4>📊 Total Capacity</h4>
-        <h1 style="color:#4f46e5; font-size:42px;">{{ total_slots }}</h1>
-        <p style="color:#9ca3af;">Total slots available</p>
-    </div>
-
-</div>
-
 
     <div class="table">
         <h3>Parking Utilization Trend</h3>
@@ -237,7 +175,7 @@ body body {
         <form method="POST" action="/book">
             <input type="text" name="location" placeholder="Location" required style="width:100%; margin-bottom:10px; padding:10px;">
             <input type="text" name="reg_no" placeholder="Registration No" required style="width:100%; margin-bottom:10px; padding:10px;">
-            <input type="number" name="driver_age" placeholder="Driver Age" required style="width:100%; margin-bottom:10px; padding:10px;">
+            <input type="number" name="driver_age" placeholder="Driver Age" required style="width:100%; margin-bottom:15px; padding:10px;">
             <button type="submit" class="primary-btn">Confirm Booking</button>
         </form>
     </div>
@@ -248,6 +186,13 @@ function openModal(){
     document.getElementById('bookingModal').style.display='flex';
 }
 
+window.onclick = function(event) {
+  const modal = document.getElementById('bookingModal');
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
 new Chart(document.getElementById("chart"), {
     type: 'line',
     data: {
@@ -256,13 +201,13 @@ new Chart(document.getElementById("chart"), {
             label: "Utilization %",
             data: [40, 50, 65, 70, 85, 95],
             borderColor: "#4f46e5",
-            fill: true
+            backgroundColor: "rgba(79,70,229,0.15)",
+            fill: true,
+            tension: 0.4
         }]
     }
 });
 </script>
 
-  </body>
-  </html>
-
-
+</body>
+</html>
