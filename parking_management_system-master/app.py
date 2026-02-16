@@ -129,6 +129,17 @@ def index():
 
     return render_template("index.html", output=output, input_text=input_text, locations=locations, selected_location=selected_location, ticket_info=ticket_info)
 
+@app.route("/book", methods=["POST"])
+def book_slot():
+    location = request.form.get("location")
+    vehicle_type = request.form.get("vehicle_type")
+    reg_no = request.form.get("reg_no")
+    driver_age = request.form.get("driver_age")
+
+    print("New Booking:")
+    print(location, vehicle_type, reg_no, driver_age)
+
+    return redirect(url_for("index"))
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
