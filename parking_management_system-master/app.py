@@ -70,6 +70,7 @@ def book_slot():
     return redirect(url_for("index"))
 
 
+
 @app.route("/exit", methods=["POST"])
 def exit_vehicle():
     global occupied_slots, booking_history
