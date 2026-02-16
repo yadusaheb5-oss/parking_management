@@ -23,18 +23,19 @@ slot_counter = 1
 @app.route("/")
 def index():
     global TOTAL_SLOTS, occupied_slots, total_vehicles
+    global total_revenue, booking_history
 
     available_slots = TOTAL_SLOTS - occupied_slots
 
-  return render_template(
-    "index.html",
-    total_slots=TOTAL_SLOTS,
-    occupied=occupied_slots,
-    available=available_slots,
-    total_vehicles=total_vehicles,
-    revenue=total_revenue,
-    history=booking_history
-)
+    return render_template(
+        "index.html",
+        total_slots=TOTAL_SLOTS,
+        occupied=occupied_slots,
+        available=available_slots,
+        total_vehicles=total_vehicles,
+        revenue=total_revenue,
+        booking_history=booking_history
+    )
 
 
 # -----------------------------
