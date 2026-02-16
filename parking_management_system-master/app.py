@@ -33,33 +33,36 @@ def index():
 # -----------------------------
 # Booking Route
 # -----------------------------
+@app.route("/", methods=["GET"])
+def index():
+    global TOTAL_SLOTS, occupied_slots, total_vehicles
+
+    available_slots = TOTAL_SLOTS - occupied_slots
+
+    return render_template(
+        "index.html",
+        total_slots=TOTAL_SLOTS,
+        occupied=occupied_slots,
+        available=available_slots,
+        total_vehicles=total_vehicles
+    )
+
+
 @app.route("/book", methods=["POST"])
 def book_slot():
     global occupied_slots, total_vehicles, TOTAL_SLOTS
 
-    location = request.form.get("location")
-    vehicle_type = request.form.get("vehicle_type")
     reg_no = request.form.get("reg_no")
     driver_age = request.form.get("driver_age")
 
-    # If slots available → book
     if occupied_slots < TOTAL_SLOTS:
         occupied_slots += 1
         total_vehicles += 1
         flash("Booking Successful!", "success")
-
-        print("New Booking:")
-        print("Location:", location)
-        print("Vehicle Type:", vehicle_type)
-        print("Registration:", reg_no)
-        print("Driver Age:", driver_age)
-
     else:
-        flash("Parking is full!", "error")
-        print("Parking Full")
+        flash("Parking is Full!", "error")
 
     return redirect(url_for("index"))
-redirect(url_for("index"))
 
 
 # -----------------------------
