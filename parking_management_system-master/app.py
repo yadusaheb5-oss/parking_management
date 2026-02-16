@@ -137,9 +137,13 @@ def book_slot():
     driver_age = request.form.get("driver_age")
 
     print("New Booking:")
-    print(location, vehicle_type, reg_no, driver_age)
+    print("Location:", location)
+    print("Vehicle Type:", vehicle_type)
+    print("Registration:", reg_no)
+    print("Driver Age:", driver_age)
 
     return redirect(url_for("index"))
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
