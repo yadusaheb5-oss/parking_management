@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 
 app = Flask(__name__)
 app.secret_key = "dev-secret-key"
@@ -33,21 +33,6 @@ def index():
 # -----------------------------
 # Booking Route
 # -----------------------------
-@app.route("/", methods=["GET"])
-def index():
-    global TOTAL_SLOTS, occupied_slots, total_vehicles
-
-    available_slots = TOTAL_SLOTS - occupied_slots
-
-    return render_template(
-        "index.html",
-        total_slots=TOTAL_SLOTS,
-        occupied=occupied_slots,
-        available=available_slots,
-        total_vehicles=total_vehicles
-    )
-
-
 @app.route("/book", methods=["POST"])
 def book_slot():
     global occupied_slots, total_vehicles, TOTAL_SLOTS
@@ -71,6 +56,3 @@ def book_slot():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-
-
-
