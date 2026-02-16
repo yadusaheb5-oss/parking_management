@@ -71,20 +71,22 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body {
+body body {
     margin:0;
     font-family:'Inter', sans-serif;
-    background:#f5f7fb;
+    background: linear-gradient(135deg, #eef2ff 0%, #f8fafc 100%);
     display:flex;
 }
 
+
 .sidebar {
-    width:220px;
-    background:white;
+    width:240px;
+    background: linear-gradient(180deg, #ffffff, #f1f5ff);
     height:100vh;
-    padding:20px;
-    box-shadow:2px 0 10px rgba(0,0,0,0.05);
+    padding:25px;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.05);
 }
+
 
 .sidebar h2 {
     font-size:18px;
@@ -93,13 +95,22 @@ body {
 
 .sidebar button {
     width:100%;
-    padding:12px;
-    margin-bottom:10px;
+    padding:14px;
+    margin-bottom:12px;
     border:none;
     background:#eef2ff;
-    border-radius:8px;
+    border-radius:10px;
     cursor:pointer;
+    font-weight:600;
+    transition:0.3s;
 }
+
+.sidebar button:hover {
+    background:#4f46e5;
+    color:white;
+    transform:translateX(5px);
+}
+
 
 .main {
     flex:1;
@@ -114,21 +125,37 @@ body {
 
 .card {
     flex:1;
-    background:white;
-    padding:20px;
-    border-radius:12px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.05);
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(10px);
+    padding:30px;
+    border-radius:18px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    transition:0.3s ease;
 }
 
-.primary-btn {
-    background:#4f46e5;
-    color:white;
-    padding:12px 20px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    margin-top:20px;
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 45px rgba(79,70,229,0.15);
 }
+
+
+.primary-btn {
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    color:white;
+    padding:14px 28px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:600;
+    font-size:16px;
+    transition:0.3s ease;
+}
+
+.primary-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 30px rgba(79,70,229,0.4);
+}
+
 
 .table {
     background:white;
@@ -174,22 +201,28 @@ body {
 
     <button class="primary-btn" onclick="openModal()">Book Parking Slot</button>
 
-    <div class="cards">
-        <div class="card">
-            <h4>Occupied Slots</h4>
-            <h2>{{ occupied }}</h2>
-        </div>
+ <div class="cards">
 
-        <div class="card">
-            <h4>Available Slots</h4>
-            <h2>{{ available }}</h2>
-        </div>
-
-        <div class="card">
-            <h4>Total Vehicles</h4>
-            <h2>{{ total_slots }}</h2>
-        </div>
+    <div class="card">
+        <h4>🚗 Occupied Slots</h4>
+        <h1 style="color:#ef4444; font-size:42px;">{{ occupied }}</h1>
+        <p style="color:#9ca3af;">Currently parked vehicles</p>
     </div>
+
+    <div class="card">
+        <h4>🅿 Available Slots</h4>
+        <h1 style="color:#22c55e; font-size:42px;">{{ available }}</h1>
+        <p style="color:#9ca3af;">Free parking spaces</p>
+    </div>
+
+    <div class="card">
+        <h4>📊 Total Capacity</h4>
+        <h1 style="color:#4f46e5; font-size:42px;">{{ total_slots }}</h1>
+        <p style="color:#9ca3af;">Total slots available</p>
+    </div>
+
+</div>
+
 
     <div class="table">
         <h3>Parking Utilization Trend</h3>
