@@ -43,24 +43,23 @@ def book_slot():
     driver_age = request.form.get("driver_age")
 
     # If slots available → book
-   if occupied_slots < TOTAL_SLOTS:
-    occupied_slots += 1
-    total_vehicles += 1
-    flash("Booking Successful!", "success")
-else:
-    flash("Parking is full!", "error")
-
-
+    if occupied_slots < TOTAL_SLOTS:
+        occupied_slots += 1
+        total_vehicles += 1
+        flash("Booking Successful!", "success")
 
         print("New Booking:")
         print("Location:", location)
         print("Vehicle Type:", vehicle_type)
         print("Registration:", reg_no)
         print("Driver Age:", driver_age)
+
     else:
+        flash("Parking is full!", "error")
         print("Parking Full")
 
     return redirect(url_for("index"))
+redirect(url_for("index"))
 
 
 # -----------------------------
