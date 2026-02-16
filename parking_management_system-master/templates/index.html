@@ -162,25 +162,33 @@ body {
 
     <div class="cards">
 
-        <div class="card">
-            <h4>🚗 Occupied Slots</h4>
-            <h1 style="color:#ef4444; font-size:42px;">{{ occupied }}</h1>
-            <p style="color:#9ca3af;">Currently parked vehicles</p>
-        </div>
-
-        <div class="card">
-            <h4>🅿 Available Slots</h4>
-            <h1 style="color:#22c55e; font-size:42px;">{{ available }}</h1>
-            <p style="color:#9ca3af;">Free parking spaces</p>
-        </div>
-
-        <div class="card">
-            <h4>📊 Total Capacity</h4>
-            <h1 style="color:#4f46e5; font-size:42px;">{{ total_slots }}</h1>
-            <p style="color:#9ca3af;">Total slots available</p>
-        </div>
-
+    <div class="card">
+        <h4>🚗 Occupied Slots</h4>
+        <h1 style="color:#ef4444; font-size:42px;">{{ occupied }}</h1>
+        <p style="color:#9ca3af;">Currently parked vehicles</p>
     </div>
+
+    <div class="card">
+        <h4>🅿 Available Slots</h4>
+        <h1 style="color:#22c55e; font-size:42px;">{{ available }}</h1>
+        <p style="color:#9ca3af;">Free parking spaces</p>
+    </div>
+
+    <div class="card">
+        <h4>📊 Total Capacity</h4>
+        <h1 style="color:#4f46e5; font-size:42px;">{{ total_slots }}</h1>
+        <p style="color:#9ca3af;">Total slots available</p>
+    </div>
+
+    <!-- ADD THIS NEW CARD HERE -->
+    <div class="card">
+        <h4>💰 Total Revenue</h4>
+        <h1 style="color:#16a34a; font-size:42px;">₹{{ revenue }}</h1>
+        <p style="color:#9ca3af;">Today's Earnings</p>
+    </div>
+
+</div>
+
 
     <div class="table">
         <h3>Parking Utilization Trend</h3>
@@ -201,6 +209,24 @@ body {
             <button type="submit" class="primary-btn">Confirm Booking</button>
         </form>
     </div>
+
+    <!-- Exit Vehicle Section -->
+<div style="margin-top:30px; padding:20px; background:white; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.05);">
+
+    <h3>🚘 Vehicle Exit</h3>
+
+    <form method="POST" action="/exit" style="margin-top:15px;">
+        <input type="text" name="exit_reg_no" 
+               placeholder="Enter Registration to Exit"
+               style="padding:10px; border-radius:8px; border:1px solid #ddd; width:250px;">
+
+        <button type="submit" class="primary-btn">
+            Release Slot
+        </button>
+    </form>
+
+</div>
+
 </div>
 
 <script>
