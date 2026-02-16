@@ -137,82 +137,64 @@
         {% endif %}
       {% endwith %}
 
-      <section id="console" class="grid">
-        <div class="card">
-          <h3>Input</h3>
-          <div class="content">
-            <form method="post" enctype="multipart/form-data">
-              <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px; align-items: end;">
-                <div>
-                  <label for="location">Location</label>
-                  <select id="location" name="location" style="width:100%; background: rgba(255,255,255,.03); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 10px;">
-                    {% for loc in locations %}
-                      <option value="{{ loc.id }}" {% if selected_location == loc.id %}selected{% endif %}>{{ loc.name }} ({{ loc.capacity }} slots)</option>
-                    {% endfor %}
-                  </select>
-                </div>
-                <div class="muted" style="font-size:13px;">
-                  Selecting a location will auto-set capacity via <code>Create_parking_lot</code>.
-                </div>
-              </div>
-              <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 10px; align-items: end;">
-                <div>
-                  <label for="vehicle_type">Vehicle Type</label>
-                  <select id="vehicle_type" name="vehicle_type" style="width:100%; background: rgba(255,255,255,.03); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 10px;">
-                    <option value="2w">2-Wheeler</option>
-                    <option value="4w" selected>4-Wheeler</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="reg_no">Registration No.</label>
-                  <input id="reg_no" name="reg_no" type="text" placeholder="KA-01-XX-1234" style="width:100%; background: rgba(255,255,255,.03); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 10px;" />
-                </div>
-                <div>
-                  <label for="driver_age">Driver Age</label>
-                  <input id="driver_age" name="driver_age" type="number" min="16" max="100" placeholder="21" style="width:100%; background: rgba(255,255,255,.03); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 10px;" />
-                </div>
-                <div>
-                  <button type="button" class="btn" onclick="appendParkLine()" style="width:100%;">Add Park line</button>
-                </div>
-              </div>
-              <label for="commands">Commands</label>
-              <textarea id="commands" name="commands" placeholder="Create_parking_lot 6
-Park KA-01-HH-1234 driver_age 21
-Park PB-01-HH-1234 driver_age 21
-Slot_numbers_for_driver_of_age 21
-Leave 2
-Vehicle_registration_number_for_driver_of_age 21
-" spellcheck="false">{{ input_text|default("", true) }}</textarea>
+      <section id="dashboard" style="display:flex; gap:20px; margin-top:30px;">
 
-              <div class="controls">
-                <div class="file">
-                  <label for="input_file" style="margin: 0 0 6px 0;">Or upload text file</label><br />
-                  <input type="file" id="input_file" name="input_file" accept="text/plain" />
-                </div>
-                <button type="submit" class="btn">Run</button>
-                <button type="button" class="btn secondary" onclick="fillSample()">Fill sample</button>
-                <button type="button" class="btn secondary" onclick="clearInput()">Clear</button>
-                <button type="button" class="btn secondary" onclick="appendSample('2w')">Add sample 2-Wheeler</button>
-                <button type="button" class="btn secondary" onclick="appendSample('4w')">Add sample 4-Wheeler</button>
-              </div>
-            </form>
-          </div>
-        </div>
+  <!-- Sidebar -->
+  <div style="width:220px; background:#f4f6fb; padding:20px; border-radius:12px;">
+    <h3 style="margin-bottom:20px;">Dashboard</h3>
+    <button class="btn" style="width:100%; margin-bottom:10px;">Overview</button>
+    <button class="btn secondary" style="width:100%; margin-bottom:10px;">Bookings</button>
+    <button class="btn secondary" style="width:100%; margin-bottom:10px;">AI Insights</button>
+    <button class="btn secondary" style="width:100%;">Settings</button>
+  </div>
 
-        <div class="card output">
-          <header>
-            <div class="muted">Output</div>
-            <button class="btn secondary" onclick="copyOutput()">Copy</button>
-          </header>
-          <div class="content">
-            {% if output is not none %}
-              <pre id="outpre">{{ output }}</pre>
-            {% else %}
-              <pre id="outpre" class="muted">Run to see results here…</pre>
-            {% endif %}
-          </div>
+  <!-- Main Content -->
+  <div style="flex:1;">
+
+    <!-- Stats Row -->
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-bottom:25px;">
+
+      <div class="card">
+        <div class="content">
+          <h4>Total Slots</h4>
+          <h2>120</h2>
         </div>
-      </section>
+      </div>
+
+      <div class="card">
+        <div class="content">
+          <h4>Occupied</h4>
+          <h2>74</h2>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="content">
+          <h4>Available</h4>
+          <h2>46</h2>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Book Slot Button -->
+    <div style="margin-bottom:25px;">
+      <button class="btn" onclick="openModal('bookingModal')">
+        🚗 Book a Slot
+      </button>
+    </div>
+
+    <!-- AI Prediction Panel -->
+    <div class="card">
+      <div class="content">
+        <h3>🤖 AI Insights</h3>
+        <p>Peak demand expected between 5 PM – 8 PM.</p>
+        <p>Recommended: Increase 4-Wheeler slots during weekends.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
 
       <section id="contact" class="card" style="margin-top: 18px;">
         <h3>Contact</h3>
@@ -221,6 +203,37 @@ Vehicle_registration_number_for_driver_of_age 21
           <a class="btn secondary" style="text-decoration:none;" href="mailto:hello@parkingco.example">hello@parkingco.example</a>
         </div>
       </section>
+      <!-- Booking Modal -->
+<div id="bookingModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); justify-content:center; align-items:center; z-index:999;">
+  <div style="background:white; padding:30px; border-radius:12px; width:400px;">
+    
+    <h3>Book Parking Slot</h3>
+
+    <form method="POST" action="/book-slot">
+      
+      <label>Location</label>
+      <input type="text" name="location" required style="width:100%; margin-bottom:10px;">
+
+      <label>Vehicle Type</label>
+      <select name="vehicle_type" style="width:100%; margin-bottom:10px;">
+        <option>2-Wheeler</option>
+        <option>4-Wheeler</option>
+      </select>
+
+      <label>Registration No.</label>
+      <input type="text" name="reg_no" required style="width:100%; margin-bottom:10px;">
+
+      <label>Driver Age</label>
+      <input type="number" name="driver_age" required style="width:100%; margin-bottom:15px;">
+
+      <button type="submit" class="btn" style="width:100%;">Confirm Booking</button>
+    </form>
+
+    <button onclick="closeModal('bookingModal')" style="margin-top:10px; width:100%;">Cancel</button>
+
+  </div>
+</div>
+
       <!-- Smart Allocation Modal -->
 <div id="allocationModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); justify-content:center; align-items:center; z-index:999;">
   <div style="background:var(--panel); padding:24px; border-radius:14px; max-width:500px; width:90%;">
