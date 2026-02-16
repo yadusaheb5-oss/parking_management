@@ -46,6 +46,8 @@ def book_slot():
     if occupied_slots < TOTAL_SLOTS:
         occupied_slots += 1
         total_vehicles += 1
+            return redirect(url_for("index"))
+
 
         print("New Booking:")
         print("Location:", location)
