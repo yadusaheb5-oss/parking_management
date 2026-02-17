@@ -20,7 +20,7 @@ booking_history = []
 
 # Dummy Admin Credentials
 ADMIN_USER = "admin"
-ADMIN_PASS = "1234"
+ADMIN_PASS = "Rosh@2002"
 
 ADMIN_DETAILS = {
     "name": "Roshni Sharma",
