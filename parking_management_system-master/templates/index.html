@@ -144,14 +144,36 @@ body {
 <!-- ===== NAVBAR ===== -->
 <div class="navbar">
     <div class="nav-left">🚗 Smart Parking</div>
-    <div class="nav-right">
-        <button>Dashboard</button>
-<a href="/bookings">
-    <button>Bookings</button>
-</a>
-        <button>Settings</button>
-    </div>
+   <div class="nav-right">
+    <button>Dashboard</button>
+
+    <a href="/bookings">
+        <button>Bookings</button>
+    </a>
+
+    <button>Settings</button>
+
+    {% if session.get('admin') %}
+        <span style="margin-left:15px; font-weight:600;">
+            👤 {{ session['admin']['name'] }}
+            ({{ session['admin']['emp_id'] }})
+        </span>
+
+        <a href="/logout">
+            <button style="
+                background:#ef4444;
+                color:white;
+                margin-left:10px;
+                padding:8px 14px;
+                border:none;
+                border-radius:8px;
+                cursor:pointer;">
+                Logout
+            </button>
+        </a>
+    {% endif %}
 </div>
+
 
 <!-- ===== MAIN ===== -->
 <div class="main">
