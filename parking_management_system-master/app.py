@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, flash
 
 app = Flask(__name__)
@@ -8,13 +9,13 @@ app.secret_key = "dev-secret-key"
 # Global Dashboard Stats
 # -----------------------------
 TOTAL_SLOTS = 120
-occupied_slots = 74
-total_vehicles = 50
-
-booking_history = []
+occupied_slots = 0
+total_vehicles = 0
 total_revenue = 0
 slot_counter = 1
 
+# Store booking records
+booking_history = []
 
 
 # -----------------------------
@@ -22,8 +23,7 @@ slot_counter = 1
 # -----------------------------
 @app.route("/")
 def index():
-    global TOTAL_SLOTS, occupied_slots, total_vehicles
-    global total_revenue, booking_history
+    global TOTAL_SLOTS, occupied_slots, total_vehicles, total_revenue
 
     available_slots = TOTAL_SLOTS - occupied_slots
 
@@ -33,8 +33,7 @@ def index():
         occupied=occupied_slots,
         available=available_slots,
         total_vehicles=total_vehicles,
-        revenue=total_revenue,
-        booking_history=booking_history
+        revenue=total_revenue
     )
 
 
@@ -48,20 +47,34 @@ def book_slot():
 
     reg_no = request.form.get("reg_no")
     driver_age = request.form.get("driver_age")
+    vehicle_type = request.form.get("vehicle_type")
+    vip_status = request.form.get("vip_status")
 
     if occupied_slots < TOTAL_SLOTS:
-        occupied_slots += 1
-        total_vehicles += 1
+
+        booking_time = datetime.now().strftime("%d-%m-%Y %I:%M %p")
 
         booking = {
             "slot": slot_counter,
             "reg_no": reg_no,
-            "age": driver_age
+            "age": driver_age,
+            "vehicle_type": vehicle_type,
+            "vip_status": vip_status,
+            "booking_time": booking_time,
+            "exit_time": None
         }
 
         booking_history.append(booking)
 
-        total_revenue += 20   # ₹20 flat rate
+        occupied_slots += 1
+        total_vehicles += 1
+
+        # Pricing logic
+        if vehicle_type == "4 Wheeler":
+            total_revenue += 40
+        else:
+            total_revenue += 20
+
         slot_counter += 1
 
         flash("Booking Successful!", "success")
@@ -71,24 +84,30 @@ def book_slot():
     return redirect(url_for("index"))
 
 
-
+# -----------------------------
+# Exit Route
+# -----------------------------
 @app.route("/exit", methods=["POST"])
 def exit_vehicle():
-    global occupied_slots, booking_history
+    global occupied_slots
 
     reg_no = request.form.get("exit_reg_no")
 
     for booking in booking_history:
-        if booking["reg_no"] == reg_no:
-            booking_history.remove(booking)
+        if booking["reg_no"] == reg_no and booking["exit_time"] is None:
             occupied_slots -= 1
-            flash("Vehicle Exited Successfully!", "success")
-            break
-    else:
-        flash("Vehicle Not Found!", "error")
+            exit_time = datetime.now().strftime("%d-%m-%Y %I:%M %p")
+            booking["exit_time"] = exit_time
+            flash("Vehicle Released Successfully!", "success")
+            return redirect(url_for("index"))
 
+    flash("Vehicle Not Found or Already Released!", "error")
     return redirect(url_for("index"))
 
+
+# -----------------------------
+# Booking History Page
+# -----------------------------
 @app.route("/bookings")
 def bookings():
     global booking_history
