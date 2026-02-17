@@ -220,10 +220,35 @@ body {
 <div id="bookingModal" class="modal">
     <div class="modal-box">
         <h3>Book Parking Slot</h3>
-        <form method="POST" action="/book">
-            <input type="text" name="location" placeholder="Location" required>
-            <input type="text" name="reg_no" placeholder="Registration No" required>
-            <input type="number" name="driver_age" placeholder="Driver Age" required>
+       <form method="POST" action="/book">
+
+    <!-- Vehicle Type -->
+    <select name="vehicle_type" required 
+        style="width:100%; padding:12px; margin-bottom:12px; border-radius:10px;">
+        <option value="">Select Vehicle Type</option>
+        <option value="2-Wheeler">2 Wheeler</option>
+        <option value="4-Wheeler">4 Wheeler</option>
+    </select>
+
+    <!-- VIP Access -->
+    <select name="vip_status" required 
+        style="width:100%; padding:12px; margin-bottom:12px; border-radius:10px;">
+        <option value="">VIP Access?</option>
+        <option value="VIP">VIP</option>
+        <option value="Normal">Normal</option>
+    </select>
+
+    <!-- Registration -->
+    <input type="text" name="reg_no" placeholder="Registration No"
+           required style="width:100%; padding:12px; margin-bottom:12px; border-radius:10px;">
+
+    <!-- Driver Age -->
+    <input type="number" name="driver_age" placeholder="Driver Age"
+           required style="width:100%; padding:12px; margin-bottom:15px; border-radius:10px;">
+
+    <button type="submit" class="primary-btn">Confirm Booking</button>
+</form>
+
             <button type="submit" class="primary-btn">Confirm Booking</button>
         </form>
     </div>
