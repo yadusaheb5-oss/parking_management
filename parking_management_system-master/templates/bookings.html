@@ -1,50 +1,66 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
 <meta charset="utf-8">
 <title>Booking History</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 body {
     font-family: 'Inter', sans-serif;
-    background: #f8fafc;
+    background: #f5f7fb;
+    margin: 0;
     padding: 40px;
 }
 
-h1 {
-    margin-bottom: 25px;
+.container {
+    max-width: 1100px;
+    margin: auto;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+.table-box {
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
 }
 
-th {
-    background: #4f46e5;
-    color: white;
-    padding: 15px;
-    text-align: left;
-}
-
-td {
-    padding: 15px;
-    border-bottom: 1px solid #eee;
-}
-
-tr:hover {
+thead {
     background: #f1f5ff;
 }
 
+th, td {
+    padding: 14px;
+    text-align: left;
+}
+
+th {
+    font-weight: 600;
+    color: #4f46e5;
+}
+
+tbody tr {
+    border-top: 1px solid #eee;
+}
+
+tbody tr:hover {
+    background: #f9fafc;
+}
+
 .back-btn {
+    margin-top: 20px;
     display: inline-block;
-    margin-bottom: 20px;
-    padding: 10px 20px;
+    padding: 10px 18px;
     background: #4f46e5;
     color: white;
     text-decoration: none;
@@ -56,26 +72,46 @@ tr:hover {
 
 <body>
 
-<a href="/" class="back-btn">⬅ Back to Dashboard</a>
+<div class="container">
+    <h2>Recent Bookings</h2>
 
-<h1>📋 Booking History</h1>
+    <div class="table-box">
+        <table>
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Vehicle Type</th>
+                    <th>Registration</th>
+                    <th>Driver Age</th>
+                    <th>VIP</th>
+                    <th>Booking Time</th>
+                    <th>Exit Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in bookings %}
+                <tr>
+                    <td>BKN-{{ b.slot }}</td>
+                    <td>{{ b.vehicle_type }}</td>
+                    <td>{{ b.reg_no }}</td>
+                    <td>{{ b.age }}</td>
+                    <td>{{ b.vip_status }}</td>
+                    <td>{{ b.booking_time }}</td>
+                    <td>
+                        {% if b.exit_time %}
+                            {{ b.exit_time }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-<table>
-    <tr>
-        <th>Slot</th>
-        <th>Registration No</th>
-        <th>Driver Age</th>
-    </tr>
-
-    {% for booking in bookings %}
-    <tr>
-        <td>{{ booking.slot }}</td>
-        <td>{{ booking.reg_no }}</td>
-        <td>{{ booking.age }}</td>
-    </tr>
-    {% endfor %}
-
-</table>
+    <a href="/" class="back-btn">← Back to Dashboard</a>
+</div>
 
 </body>
 </html>
