@@ -15,7 +15,7 @@ body {
     background: linear-gradient(135deg, #eef2ff 0%, #f8fafc 100%);
 }
 
-/* ===== TOP NAVBAR ===== */
+/* ===== NAVBAR ===== */
 .navbar {
     display:flex;
     justify-content:space-between;
@@ -28,6 +28,11 @@ body {
 .nav-left {
     font-weight:700;
     font-size:20px;
+}
+
+.nav-right {
+    display:flex;
+    align-items:center;
 }
 
 .nav-right button {
@@ -81,7 +86,6 @@ body {
     flex:1;
     min-width:220px;
     background: rgba(255,255,255,0.9);
-    backdrop-filter: blur(10px);
     padding:30px;
     border-radius:18px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.08);
@@ -93,7 +97,7 @@ body {
     box-shadow: 0 20px 45px rgba(79,70,229,0.15);
 }
 
-/* ===== TABLE / CHART ===== */
+/* ===== TABLE ===== */
 .table {
     background:white;
     margin-top:40px;
@@ -129,12 +133,14 @@ body {
     width:400px;
 }
 
-.modal-box input {
+.modal-box input,
+.modal-box select {
     width:100%;
     margin-bottom:15px;
-    padding:10px;
-    border-radius:8px;
+    padding:12px;
+    border-radius:10px;
     border:1px solid #ddd;
+    font-weight:600;
 }
 </style>
 </head>
@@ -144,36 +150,32 @@ body {
 <!-- ===== NAVBAR ===== -->
 <div class="navbar">
     <div class="nav-left">🚗 Smart Parking</div>
-   <div class="nav-right">
-    <button>Dashboard</button>
 
-    <a href="/bookings">
-        <button>Bookings</button>
-    </a>
+    <div class="nav-right">
+        <button onclick="window.location.href='/'">Dashboard</button>
 
-    <button>Settings</button>
-
-    {% if session.get('admin') %}
-        <span style="margin-left:15px; font-weight:600;">
-            👤 {{ session['admin']['name'] }}
-            ({{ session['admin']['emp_id'] }})
-        </span>
-
-        <a href="/logout">
-            <button style="
-                background:#ef4444;
-                color:white;
-                margin-left:10px;
-                padding:8px 14px;
-                border:none;
-                border-radius:8px;
-                cursor:pointer;">
-                Logout
-            </button>
+        <a href="/bookings">
+            <button>Bookings</button>
         </a>
-    {% endif %}
-</div>
 
+        <button>Settings</button>
+
+        {% if session.get('admin') %}
+            <span style="margin-left:15px; font-weight:600;">
+                👤 {{ session['admin']['name'] }}
+                ({{ session['admin']['emp_id'] }})
+            </span>
+
+            <a href="/logout">
+                <button style="
+                    background:#ef4444;
+                    color:white;">
+                    Logout
+                </button>
+            </a>
+        {% endif %}
+    </div>
+</div>
 
 <!-- ===== MAIN ===== -->
 <div class="main">
@@ -242,35 +244,26 @@ body {
 <div id="bookingModal" class="modal">
     <div class="modal-box">
         <h3>Book Parking Slot</h3>
-       <form method="POST" action="/book">
 
-    <!-- Vehicle Type -->
-    <select name="vehicle_type" required 
-        style="width:100%; padding:12px; margin-bottom:12px; border-radius:10px;">
-        <option value="">Select Vehicle Type</option>
-        <option value="2-Wheeler">2 Wheeler</option>
-        <option value="4-Wheeler">4 Wheeler</option>
-    </select>
+        <form method="POST" action="/book">
 
-    <!-- VIP Access -->
-    <select name="vip_status" required 
-        style="width:100%; padding:12px; margin-bottom:12px; border-radius:10px;">
-        <option value="VIP">VIP</option>
-        <option value="Normal">Normal</option>
-    </select>
+            <select name="vehicle_type" required>
+                <option value="">Select Vehicle Type</option>
+                <option value="2-Wheeler">2 Wheeler</option>
+                <option value="4-Wheeler">4 Wheeler</option>
+            </select>
 
-    <!-- Registration -->
-    <input type="text" name="reg_no" placeholder="Registration No"
-           required style="width:100%; padding:12px; margin-bottom:12px; border-radius:10px;">
+            <select name="vip_status" required>
+                <option value="VIP">VIP</option>
+                <option value="Normal">Normal</option>
+            </select>
 
-    <!-- Driver Age -->
-    <input type="number" name="driver_age" placeholder="Driver Age"
-           required style="width:100%; padding:12px; margin-bottom:15px; border-radius:10px;">
+            <input type="text" name="reg_no" placeholder="Registration No" required>
 
-    <button type="submit" class="primary-btn">Confirm Booking</button>
-</form>
+            <input type="number" name="driver_age" placeholder="Driver Age" required>
 
-           
+            <button type="submit" class="primary-btn">Confirm Booking</button>
+        </form>
     </div>
 </div>
 
@@ -278,10 +271,12 @@ body {
 <div id="exitModal" class="modal">
     <div class="modal-box">
         <h3>🚗 Vehicle Exit</h3>
+
         <form method="POST" action="/exit">
             <input type="text" name="exit_reg_no"
                    placeholder="Enter Registration to Exit"
                    required>
+
             <button type="submit"
                 class="primary-btn"
                 style="background:linear-gradient(135deg,#ef4444,#f87171);">
