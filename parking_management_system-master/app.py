@@ -1,3 +1,4 @@
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 import os
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, flash
@@ -17,13 +18,26 @@ slot_counter = 1
 # Store booking records
 booking_history = []
 
+# Dummy Admin Credentials
+ADMIN_USER = "admin"
+ADMIN_PASS = "1234"
+
+ADMIN_DETAILS = {
+    "name": "Roshni Sharma",
+    "employee_id": "EMP-1023"
+}
+
+
 
 # -----------------------------
 # Dashboard Route
 # -----------------------------
 @app.route("/")
 def index():
-    global TOTAL_SLOTS, occupied_slots, total_vehicles, total_revenue
+    if "admin" not in session:
+        return redirect(url_for("login"))
+
+    global TOTAL_SLOTS, occupied_slots, total_revenue, booking_history
 
     available_slots = TOTAL_SLOTS - occupied_slots
 
@@ -32,9 +46,11 @@ def index():
         total_slots=TOTAL_SLOTS,
         occupied=occupied_slots,
         available=available_slots,
-        total_vehicles=total_vehicles,
-        revenue=total_revenue
+        revenue=total_revenue,
+        bookings=booking_history,
+        admin=session["admin"]
     )
+
 
 
 # -----------------------------
@@ -112,6 +128,25 @@ def exit_vehicle():
 def bookings():
     global booking_history
     return render_template("bookings.html", bookings=booking_history)
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        user = request.form.get("username")
+        password = request.form.get("password")
+
+        if user == ADMIN_USER and password == ADMIN_PASS:
+            session["admin"] = ADMIN_DETAILS
+            return redirect(url_for("index"))
+        else:
+            flash("Invalid Credentials!", "error")
+
+    return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    session.pop("admin", None)
+    return redirect(url_for("login"))
 
 
 # -----------------------------
