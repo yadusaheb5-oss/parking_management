@@ -23,7 +23,7 @@ ADMIN_USER = "admin"
 ADMIN_PASS = "Rosh@2002"
 
 ADMIN_DETAILS = {
-    "name": "Roshni Sharma",
+    "name": "Roshni S",
     "employee_id": "EMP-1023"
 }
 
