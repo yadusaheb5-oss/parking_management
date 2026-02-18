@@ -1,9 +1,26 @@
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 import os
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, flash
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///parking.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+class Booking(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    reg_no = db.Column(db.String(50), nullable=False)
+    vehicle_type = db.Column(db.String(20))
+    vip_status = db.Column(db.String(20))
+    driver_age = db.Column(db.Integer)
+    booking_time = db.Column(db.DateTime, default=datetime.utcnow)
+    exit_time = db.Column(db.DateTime, nullable=True)
+    amount = db.Column(db.Integer, default=0)
+
+
 app.secret_key = "dev-secret-key"
 
 # -----------------------------
@@ -34,21 +51,20 @@ ADMIN_DETAILS = {
 # -----------------------------
 @app.route("/")
 def index():
-    if "admin" not in session:
-        return redirect(url_for("login"))
 
-    global TOTAL_SLOTS, occupied_slots, total_revenue, booking_history
+    bookings = Booking.query.all()
 
-    available_slots = TOTAL_SLOTS - occupied_slots
+    occupied = Booking.query.filter_by(exit_time=None).count()
+    total_slots = 120
+    available = total_slots - occupied
+    revenue = sum(b.amount for b in bookings)
 
     return render_template(
         "index.html",
-        total_slots=TOTAL_SLOTS,
-        occupied=occupied_slots,
-        available=available_slots,
-        revenue=total_revenue,
-        bookings=booking_history,
-        admin=session["admin"]
+        occupied=occupied,
+        available=available,
+        total_slots=total_slots,
+        revenue=revenue
     )
 
 
@@ -58,67 +74,50 @@ def index():
 # -----------------------------
 @app.route("/book", methods=["POST"])
 def book_slot():
-    global occupied_slots, total_vehicles, TOTAL_SLOTS
-    global booking_history, total_revenue, slot_counter
 
     reg_no = request.form.get("reg_no")
-    driver_age = request.form.get("driver_age")
     vehicle_type = request.form.get("vehicle_type")
     vip_status = request.form.get("vip_status")
+    driver_age = request.form.get("driver_age")
 
-    if occupied_slots < TOTAL_SLOTS:
+    amount = 50 if vehicle_type == "4-Wheeler" else 20
+    if vip_status == "VIP":
+        amount += 30
 
-        booking_time = datetime.now().strftime("%d-%m-%Y %I:%M %p")
+    new_booking = Booking(
+        reg_no=reg_no,
+        vehicle_type=vehicle_type,
+        vip_status=vip_status,
+        driver_age=driver_age,
+        amount=amount
+    )
 
-        booking = {
-            "slot": slot_counter,
-            "reg_no": reg_no,
-            "age": driver_age,
-            "vehicle_type": vehicle_type,
-            "vip_status": vip_status,
-            "booking_time": booking_time,
-            "exit_time": None
-        }
+    db.session.add(new_booking)
+    db.session.commit()
 
-        booking_history.append(booking)
-
-        occupied_slots += 1
-        total_vehicles += 1
-
-        # Pricing logic
-        if vehicle_type == "4 Wheeler":
-            total_revenue += 40
-        else:
-            total_revenue += 20
-
-        slot_counter += 1
-
-        flash("Booking Successful!", "success")
-    else:
-        flash("Parking is Full!", "error")
-
+    flash("Booking Successful!", "success")
     return redirect(url_for("index"))
+
 
 
 # -----------------------------
 # Exit Route
 # -----------------------------
 @app.route("/exit", methods=["POST"])
-def exit_vehicle():
-    global occupied_slots
+def exit_slot():
 
     reg_no = request.form.get("exit_reg_no")
+    booking = Booking.query.filter_by(reg_no=reg_no, exit_time=None).first()
 
-    for booking in booking_history:
-        if booking["reg_no"] == reg_no and booking["exit_time"] is None:
-            occupied_slots -= 1
-            exit_time = datetime.now().strftime("%d-%m-%Y %I:%M %p")
-            booking["exit_time"] = exit_time
-            flash("Vehicle Released Successfully!", "success")
-            return redirect(url_for("index"))
+    if booking:
+        booking.exit_time = datetime.utcnow()
+        db.session.commit()
+        flash("Vehicle Exited Successfully!", "success")
+    else:
+        flash("Vehicle Not Found!", "error")
 
-    flash("Vehicle Not Found or Already Released!", "error")
     return redirect(url_for("index"))
+
 
 
 # -----------------------------
@@ -148,6 +147,8 @@ def logout():
     session.pop("admin", None)
     return redirect(url_for("login"))
 
+with app.app_context():
+    db.create_all()
 
 # -----------------------------
 # Run App
