@@ -68,16 +68,22 @@ def logout():
 # -----------------------------
 @app.route("/")
 def index():
-    # 🔐 Protect dashboard
     if "admin" not in session:
         return redirect(url_for("login"))
 
-    bookings = Booking.query.all()
+    # Get all bookings
+    all_bookings = Booking.query.all()
 
+    # Get latest 5 bookings for dashboard table
+    recent_bookings = Booking.query.order_by(
+        Booking.booking_time.desc()
+    ).limit(5).all()
+
+    # Dashboard stats
     occupied = Booking.query.filter_by(exit_time=None).count()
     total_slots = 120
     available = total_slots - occupied
-    revenue = sum(b.amount for b in bookings)
+    revenue = sum(b.amount for b in all_bookings)
 
     return render_template(
         "index.html",
@@ -85,9 +91,9 @@ def index():
         available=available,
         total_slots=total_slots,
         revenue=revenue,
+        bookings=recent_bookings,
         admin=session["admin"]
     )
-
 # -----------------------------
 # Booking Route
 # -----------------------------
