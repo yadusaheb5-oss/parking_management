@@ -54,8 +54,17 @@
             border: none;
             border-radius: 10px;
             padding: 10px 20px;
+            color: white;
         }
 
+        .btn-primary-custom:hover {
+            color: white;
+        }
+
+        .release-box {
+            margin-top: 20px;
+            max-width: 500px;
+        }
     </style>
 </head>
 
@@ -83,10 +92,28 @@
             <h2>Welcome, Admin!</h2>
             <p class="text-muted">Manage parking slots efficiently.</p>
 
-            <div class="mb-4">
-<a href="{{ url_for('book_page') }}" class="btn btn-primary-custom">
-    <i class="bi bi-plus-circle"></i> Book Parking Slot
-</a>            </div>
+            <!-- Book Button -->
+            <div class="mb-3">
+                <a href="{{ url_for('book_page') }}" class="btn btn-primary-custom">
+                    <i class="bi bi-plus-circle"></i> Book Parking Slot
+                </a>
+            </div>
+
+            <!-- Release Slot Form -->
+            <div class="release-box">
+                <form method="POST" action="{{ url_for('exit_slot') }}" class="d-flex gap-2">
+                    <input type="text"
+                           name="exit_reg_no"
+                           class="form-control"
+                           placeholder="Enter Registration No to Release"
+                           required>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-box-arrow-right"></i> Release Slot
+                    </button>
+                </form>
+            </div>
+
+            <hr class="my-4">
 
             <!-- Stats Cards -->
             <div class="row g-4">
