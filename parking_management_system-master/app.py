@@ -1,3 +1,4 @@
+from Models.Admin import Admin
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -172,6 +173,25 @@ def book_page():
 # -----------------------------
 with app.app_context():
     db.create_all()
+
+@app.route("/settings", methods=["GET", "POST"])
+def settings():
+    admin = Admin.query.first()
+
+    if request.method == "POST":
+        new_name = request.form.get("name")
+        new_password = request.form.get("password")
+
+        if new_name:
+            admin.name = new_name
+
+        if new_password:
+            admin.password = new_password
+
+        db.session.commit()
+        flash("Settings updated successfully!")
+
+    return render_template("settings.html", admin=admin)
 
 # -----------------------------
 # Run App
