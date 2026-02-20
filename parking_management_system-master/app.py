@@ -71,16 +71,12 @@ def index():
     if "admin" not in session:
         return redirect("/login")
 
-    all_bookings = Booking.query.all()
-
-    recent_bookings = Booking.query.order_by(
-        Booking.booking_time.desc()
-    ).limit(5).all()
-
-    occupied = Booking.query.filter_by(exit_time=None).count()
+    # Temporary static dashboard (no DB access)
+    occupied = 0
     total_slots = 120
-    available = total_slots - occupied
-    revenue = sum(b.amount for b in all_bookings)
+    available = 120
+    revenue = 0
+    recent_bookings = []
 
     return render_template(
         "index.html",
