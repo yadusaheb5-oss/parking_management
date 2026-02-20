@@ -1,3 +1,4 @@
+ 
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -23,6 +24,7 @@ class Booking(db.Model):
     vehicle_type = db.Column(db.String(20))
     vip_status = db.Column(db.String(20))
     driver_age = db.Column(db.Integer)
+    location = db.Column(db.String(50))
     booking_time = db.Column(db.DateTime, default=datetime.utcnow)
     exit_time = db.Column(db.DateTime, nullable=True)
     amount = db.Column(db.Integer, default=0)
@@ -69,14 +71,21 @@ def logout():
 @app.route("/")
 def index():
     if "admin" not in session:
-        return redirect("/login")
+        return redirect(url_for("login"))
 
-    # Temporary static dashboard (no DB access)
-    occupied = 0
+    # Get all bookings
+    all_bookings = Booking.query.all()
+
+    # Get latest 5 bookings for dashboard table
+    recent_bookings = Booking.query.order_by(
+        Booking.booking_time.desc()
+    ).limit(5).all()
+
+    # Dashboard stats
+    occupied = Booking.query.filter_by(exit_time=None).count()
     total_slots = 120
-    available = 120
-    revenue = 0
-    recent_bookings = []
+    available = total_slots - occupied
+    revenue = sum(b.amount for b in all_bookings)
 
     return render_template(
         "index.html",
@@ -147,7 +156,7 @@ def exit_slot():
 def bookings():
 
     if "admin" not in session:
-        return redirect("/login")
+        return redirect(url_for("login"))
 
     all_bookings = Booking.query.all()
     return render_template("bookings.html", bookings=all_bookings)
