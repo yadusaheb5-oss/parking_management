@@ -23,6 +23,7 @@ class Booking(db.Model):
     vehicle_type = db.Column(db.String(20))
     vip_status = db.Column(db.String(20))
     driver_age = db.Column(db.Integer)
+    location = db.Column(db.String(50))
     booking_time = db.Column(db.DateTime, default=datetime.utcnow)
     exit_time = db.Column(db.DateTime, nullable=True)
     amount = db.Column(db.Integer, default=0)
