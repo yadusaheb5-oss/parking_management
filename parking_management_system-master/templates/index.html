@@ -135,7 +135,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for b in Booking.query.limit(5).all() %}
+                        {% for b in bookings %}
                         <tr>
                             <td>{{ b.id }}</td>
                             <td>{{ b.reg_no }}</td>
