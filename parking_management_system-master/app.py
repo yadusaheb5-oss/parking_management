@@ -171,22 +171,20 @@ def settings():
     if "admin" not in session:
         return redirect(url_for("login"))
 
-    admin = Admin.query.first()
-
     if request.method == "POST":
         new_name = request.form.get("name")
         new_password = request.form.get("password")
 
         if new_name:
-            admin.name = new_name
+            session["admin"]["name"] = new_name
+            flash("Name updated successfully!", "success")
 
         if new_password:
-            admin.password = new_password
+            global ADMIN_PASS
+            ADMIN_PASS = new_password
+            flash("Password updated successfully!", "success")
 
-        db.session.commit()
-        flash("Settings updated successfully!", "success")
-
-    return render_template("settings.html", admin=admin)
+    return render_template("settings.html", admin=session["admin"])
 
 
 # -----------------------------
