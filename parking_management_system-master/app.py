@@ -151,7 +151,7 @@ def exit_slot():
 def bookings():
 
     if "admin" not in session:
-    return redirect("/login")
+        return redirect("/login")
 
     all_bookings = Booking.query.all()
     return render_template("bookings.html", bookings=all_bookings)
