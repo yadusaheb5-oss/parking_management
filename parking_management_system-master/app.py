@@ -69,17 +69,14 @@ def logout():
 @app.route("/")
 def index():
     if "admin" not in session:
-        return redirect(url_for("login"))
+        return redirect("/login")
 
-    # Get all bookings
     all_bookings = Booking.query.all()
 
-    # Get latest 5 bookings for dashboard table
     recent_bookings = Booking.query.order_by(
         Booking.booking_time.desc()
     ).limit(5).all()
 
-    # Dashboard stats
     occupied = Booking.query.filter_by(exit_time=None).count()
     total_slots = 120
     available = total_slots - occupied
@@ -154,7 +151,7 @@ def exit_slot():
 def bookings():
 
     if "admin" not in session:
-        return redirect(url_for("login"))
+    return redirect("/login")
 
     all_bookings = Booking.query.all()
     return render_template("bookings.html", bookings=all_bookings)
