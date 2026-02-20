@@ -159,6 +159,13 @@ def bookings():
     all_bookings = Booking.query.all()
     return render_template("bookings.html", bookings=all_bookings)
 
+@app.route("/book-page")
+def book_page():
+    if "admin" not in session:
+        return redirect(url_for("login"))
+
+    return render_template("book.html")
+
 # -----------------------------
 # Create Database
 # -----------------------------
