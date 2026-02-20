@@ -192,14 +192,7 @@ def settings():
 # -----------------------------
 # Create Database + Default Admin
 # -----------------------------
-with app.app_context():
-    db.create_all()
-
-    if not Admin.query.first():
-        default_admin = Admin(name="Admin", password="123456")
-        db.session.add(default_admin)
-        db.session.commit()
-
+ 
 
 # -----------------------------
 # Run App
