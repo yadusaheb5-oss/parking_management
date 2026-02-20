@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import os
 
- 
 app = Flask(__name__)
 
 # -----------------------------
@@ -24,14 +23,12 @@ class Booking(db.Model):
     vehicle_type = db.Column(db.String(20))
     vip_status = db.Column(db.String(20))
     driver_age = db.Column(db.Integer)
-    location = db.Column(db.String(50))
     booking_time = db.Column(db.DateTime, default=datetime.utcnow)
     exit_time = db.Column(db.DateTime, nullable=True)
     amount = db.Column(db.Integer, default=0)
 
-
 # -----------------------------
-# Admin Credentials (LOGIN ONLY)
+# Admin Credentials
 # -----------------------------
 ADMIN_USER = "admin"
 ADMIN_PASS = "Rosh@2002"
@@ -58,7 +55,6 @@ def login():
 
     return render_template("login.html")
 
-
 # -----------------------------
 # Logout Route
 # -----------------------------
@@ -66,7 +62,6 @@ def login():
 def logout():
     session.pop("admin", None)
     return redirect(url_for("login"))
-
 
 # -----------------------------
 # Dashboard Route (PROTECTED)
@@ -76,12 +71,15 @@ def index():
     if "admin" not in session:
         return redirect(url_for("login"))
 
+    # Get all bookings
     all_bookings = Booking.query.all()
 
+    # Get latest 5 bookings for dashboard table
     recent_bookings = Booking.query.order_by(
         Booking.booking_time.desc()
     ).limit(5).all()
 
+    # Dashboard stats
     occupied = Booking.query.filter_by(exit_time=None).count()
     total_slots = 120
     available = total_slots - occupied
@@ -96,13 +94,12 @@ def index():
         bookings=recent_bookings,
         admin=session["admin"]
     )
-
-
 # -----------------------------
 # Booking Route
 # -----------------------------
 @app.route("/book", methods=["POST"])
 def book_slot():
+
     if "admin" not in session:
         return redirect(url_for("login"))
 
@@ -129,12 +126,12 @@ def book_slot():
     flash("Booking Successful!", "success")
     return redirect(url_for("index"))
 
-
 # -----------------------------
 # Exit Route
 # -----------------------------
 @app.route("/exit", methods=["POST"])
 def exit_slot():
+
     if "admin" not in session:
         return redirect(url_for("login"))
 
@@ -150,47 +147,30 @@ def exit_slot():
 
     return redirect(url_for("index"))
 
-
 # -----------------------------
-# Booking History Page
+# Booking History Page (PROTECTED)
 # -----------------------------
 @app.route("/bookings")
 def bookings():
+
     if "admin" not in session:
         return redirect(url_for("login"))
 
     all_bookings = Booking.query.all()
     return render_template("bookings.html", bookings=all_bookings)
 
-
-# -----------------------------
-# Settings Route
-# -----------------------------
-@app.route("/settings", methods=["GET", "POST"])
-def settings():
+@app.route("/book-page")
+def book_page():
     if "admin" not in session:
         return redirect(url_for("login"))
 
-    if request.method == "POST":
-        new_name = request.form.get("name")
-        new_password = request.form.get("password")
-
-        if new_name:
-            session["admin"]["name"] = new_name
-            flash("Name updated successfully!", "success")
-
-        if new_password:
-            global ADMIN_PASS
-            ADMIN_PASS = new_password
-            flash("Password updated successfully!", "success")
-
-    return render_template("settings.html", admin=session["admin"])
-
+    return render_template("book.html")
 
 # -----------------------------
-# Create Database + Default Admin
+# Create Database
 # -----------------------------
- 
+with app.app_context():
+    db.create_all()
 
 # -----------------------------
 # Run App
