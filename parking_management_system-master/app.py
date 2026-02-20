@@ -3,8 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import os
 
-from Models.Admin import Admin   # keep this after db is defined if needed
-
+ 
 app = Flask(__name__)
 
 # -----------------------------
