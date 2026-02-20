@@ -73,37 +73,39 @@ tbody tr:hover {
 <body>
 
 <div class="container">
-    <h2>Recent Bookings</h2>
+    <h2>Booking History</h2>
 
     <div class="table-box">
         <table>
             <thead>
                 <tr>
-                    <th>Booking ID</th>
+                    <th>ID</th>
                     <th>Vehicle Type</th>
                     <th>Registration</th>
                     <th>Driver Age</th>
                     <th>VIP</th>
                     <th>Booking Time</th>
                     <th>Exit Time</th>
+                    <th>Amount</th>
                 </tr>
             </thead>
             <tbody>
                 {% for b in bookings %}
                 <tr>
-                    <td>BKN-{{ b.slot }}</td>
+                    <td>BKN-{{ b.id }}</td>
                     <td>{{ b.vehicle_type }}</td>
                     <td>{{ b.reg_no }}</td>
-                    <td>{{ b.age }}</td>
+                    <td>{{ b.driver_age }}</td>
                     <td>{{ b.vip_status }}</td>
-                    <td>{{ b.booking_time }}</td>
+                    <td>{{ b.booking_time.strftime("%d-%m-%Y %H:%M") }}</td>
                     <td>
                         {% if b.exit_time %}
-                            {{ b.exit_time }}
+                            {{ b.exit_time.strftime("%d-%m-%Y %H:%M") }}
                         {% else %}
                             —
                         {% endif %}
                     </td>
+                    <td>₹ {{ b.amount }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
