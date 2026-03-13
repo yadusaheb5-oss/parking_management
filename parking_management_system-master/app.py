@@ -91,8 +91,7 @@ def index():
 
     # Dashboard stats
     occupied = Booking.query.filter_by(exit_time=None).count()
-    total_slots = 120
-    available = total_slots - occupied
+ total_slots = DOWNTOWN_CAPACITY + AIRPORT_CAPACITY    available = total_slots - occupied
     revenue = sum(b.amount for b in all_bookings)
 
     return render_template(
