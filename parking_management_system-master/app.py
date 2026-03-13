@@ -1,4 +1,3 @@
- 
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -14,14 +13,20 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = "dev-secret-key"
 
 db = SQLAlchemy(app)
+
+# -----------------------------
 # Parking Capacity Settings
+# -----------------------------
 DOWNTOWN_CAPACITY = 120
 AIRPORT_CAPACITY = 80
 
+# -----------------------------
 # Parking Price Settings
+# -----------------------------
 PRICE_2_WHEELER = 20
 PRICE_4_WHEELER = 50
 VIP_EXTRA = 30
+
 
 # -----------------------------
 # Database Model
@@ -37,6 +42,7 @@ class Booking(db.Model):
     exit_time = db.Column(db.DateTime, nullable=True)
     amount = db.Column(db.Integer, default=0)
 
+
 # -----------------------------
 # Admin Credentials
 # -----------------------------
@@ -47,6 +53,7 @@ ADMIN_DETAILS = {
     "name": "Roshni S",
     "employee_id": "EMP-1023"
 }
+
 
 # -----------------------------
 # Login Route
@@ -65,6 +72,7 @@ def login():
 
     return render_template("login.html")
 
+
 # -----------------------------
 # Logout Route
 # -----------------------------
@@ -73,25 +81,26 @@ def logout():
     session.pop("admin", None)
     return redirect(url_for("login"))
 
+
 # -----------------------------
-# Dashboard Route (PROTECTED)
+# Dashboard Route
 # -----------------------------
 @app.route("/")
 def index():
+
     if "admin" not in session:
         return redirect(url_for("login"))
 
-    # Get all bookings
     all_bookings = Booking.query.all()
 
-    # Get latest 5 bookings for dashboard table
     recent_bookings = Booking.query.order_by(
         Booking.booking_time.desc()
     ).limit(5).all()
 
     # Dashboard stats
     occupied = Booking.query.filter_by(exit_time=None).count()
- total_slots = DOWNTOWN_CAPACITY + AIRPORT_CAPACITY    available = total_slots - occupied
+    total_slots = DOWNTOWN_CAPACITY + AIRPORT_CAPACITY
+    available = total_slots - occupied
     revenue = sum(b.amount for b in all_bookings)
 
     return render_template(
@@ -103,6 +112,8 @@ def index():
         bookings=recent_bookings,
         admin=session["admin"]
     )
+
+
 # -----------------------------
 # Booking Route
 # -----------------------------
@@ -118,11 +129,13 @@ def book_slot():
     driver_age = request.form.get("driver_age")
 
     if vehicle_type == "4-Wheeler":
-    amount = PRICE_4_WHEELER
-else:
-    amount = PRICE_2_WHEELER
-if vip_status == "VIP":
-    amount += VIP_EXTRA
+        amount = PRICE_4_WHEELER
+    else:
+        amount = PRICE_2_WHEELER
+
+    if vip_status == "VIP":
+        amount += VIP_EXTRA
+
     new_booking = Booking(
         reg_no=reg_no,
         vehicle_type=vehicle_type,
@@ -136,6 +149,7 @@ if vip_status == "VIP":
 
     flash("Booking Successful!", "success")
     return redirect(url_for("index"))
+
 
 # -----------------------------
 # Exit Route
@@ -158,8 +172,9 @@ def exit_slot():
 
     return redirect(url_for("index"))
 
+
 # -----------------------------
-# Booking History Page (PROTECTED)
+# Booking History
 # -----------------------------
 @app.route("/bookings")
 def bookings():
@@ -170,6 +185,10 @@ def bookings():
     all_bookings = Booking.query.all()
     return render_template("bookings.html", bookings=all_bookings)
 
+
+# -----------------------------
+# Settings Page
+# -----------------------------
 @app.route("/settings", methods=["GET", "POST"])
 def settings():
 
@@ -196,18 +215,25 @@ def settings():
         vip=VIP_EXTRA
     )
 
+
+# -----------------------------
+# Booking Form Page
+# -----------------------------
 @app.route("/book-page")
 def book_page():
+
     if "admin" not in session:
         return redirect(url_for("login"))
 
     return render_template("book.html")
+
 
 # -----------------------------
 # Create Database
 # -----------------------------
 with app.app_context():
     db.create_all()
+
 
 # -----------------------------
 # Run App
