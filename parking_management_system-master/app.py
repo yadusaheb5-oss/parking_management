@@ -14,6 +14,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = "dev-secret-key"
 
 db = SQLAlchemy(app)
+# Parking Capacity Settings
+DOWNTOWN_CAPACITY = 120
+AIRPORT_CAPACITY = 80
+
+# Parking Price Settings
+PRICE_2_WHEELER = 20
+PRICE_4_WHEELER = 50
+VIP_EXTRA = 30
 
 # -----------------------------
 # Database Model
