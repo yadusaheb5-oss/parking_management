@@ -171,6 +171,32 @@ def bookings():
     all_bookings = Booking.query.all()
     return render_template("bookings.html", bookings=all_bookings)
 
+@app.route("/settings", methods=["GET", "POST"])
+def settings():
+
+    global DOWNTOWN_CAPACITY, AIRPORT_CAPACITY
+    global PRICE_2_WHEELER, PRICE_4_WHEELER, VIP_EXTRA
+
+    if request.method == "POST":
+
+        DOWNTOWN_CAPACITY = int(request.form.get("downtown"))
+        AIRPORT_CAPACITY = int(request.form.get("airport"))
+
+        PRICE_2_WHEELER = int(request.form.get("price_2"))
+        PRICE_4_WHEELER = int(request.form.get("price_4"))
+        VIP_EXTRA = int(request.form.get("vip_extra"))
+
+        flash("Settings updated successfully")
+
+    return render_template(
+        "settings.html",
+        downtown=DOWNTOWN_CAPACITY,
+        airport=AIRPORT_CAPACITY,
+        price2=PRICE_2_WHEELER,
+        price4=PRICE_4_WHEELER,
+        vip=VIP_EXTRA
+    )
+
 @app.route("/book-page")
 def book_page():
     if "admin" not in session:
