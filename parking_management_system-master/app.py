@@ -197,14 +197,16 @@ def settings():
 
     if request.method == "POST":
 
-        DOWNTOWN_CAPACITY = int(request.form.get("downtown"))
-        AIRPORT_CAPACITY = int(request.form.get("airport"))
+        if request.method == "POST":
 
-        PRICE_2_WHEELER = int(request.form.get("price_2"))
-        PRICE_4_WHEELER = int(request.form.get("price_4"))
-        VIP_EXTRA = int(request.form.get("vip_extra"))
+    DOWNTOWN_CAPACITY = int(request.form.get("downtown") or 0)
+    AIRPORT_CAPACITY = int(request.form.get("airport") or 0)
 
-        flash("Settings updated successfully")
+    PRICE_2_WHEELER = int(request.form.get("price_2") or 0)
+    PRICE_4_WHEELER = int(request.form.get("price_4") or 0)
+    VIP_EXTRA = int(request.form.get("vip_extra") or 0)
+
+    flash("Settings updated successfully")
 
     return render_template(
         "settings.html",
