@@ -118,10 +118,12 @@ def book_slot():
     vip_status = request.form.get("vip_status")
     driver_age = request.form.get("driver_age")
 
-    amount = 50 if vehicle_type == "4-Wheeler" else 20
-    if vip_status == "VIP":
-        amount += 30
-
+    if vehicle_type == "4-Wheeler":
+    amount = PRICE_4_WHEELER
+else:
+    amount = PRICE_2_WHEELER
+if vip_status == "VIP":
+    amount += VIP_EXTRA
     new_booking = Booking(
         reg_no=reg_no,
         vehicle_type=vehicle_type,
