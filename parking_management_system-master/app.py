@@ -47,7 +47,7 @@ class Booking(db.Model):
 # Admin Credentials
 # -----------------------------
 ADMIN_USER = "admin"
-ADMIN_PASS = "Rosh@2002"
+ADMIN_PASS = "1234"
 
 ADMIN_DETAILS = {
     "name": "Roshni S",
