@@ -104,8 +104,7 @@ def index():
     revenue = sum(b.amount for b in all_bookings)
     two_wheeler = Booking.query.filter_by(vehicle_type="2-Wheeler").count()
     four_wheeler = Booking.query.filter_by(vehicle_type="4-Wheeler").count()
-    downtown = Booking.query.filter_by(location="Downtown Garage").count()
-    airport = Booking.query.filter_by(location="Airport Parking").count()
+      
 
     return render_template(
     "index.html",
