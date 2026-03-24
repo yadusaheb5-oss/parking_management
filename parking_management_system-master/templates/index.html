@@ -195,11 +195,7 @@ required>
         <canvas id="vehicleChart" style="max-width:300px;"></canvas>
 </div>
 </div>
-    <div class="card mt-4 p-4 shadow-sm">
-    <h5 class="text-center">Location Comparison</h5>
-    <canvas id="locationChart" style="max-width:500px; margin:auto;"></canvas>
-</div>
-
+   
 </div>
 
 </div>
@@ -221,17 +217,5 @@ new Chart(ctx, {
 });
 </script>
 <script>
-// BAR GRAPH
-new Chart(document.getElementById('locationChart'), {
-    type: 'bar',
-    data: {
-        labels: ['Downtown', 'Airport'],
-        datasets: [{
-            label: 'Bookings',
-            data: [{{ downtown }}, {{ airport }}]
-        }]
-    }
-});
-</script>
 </body>
 </html>
