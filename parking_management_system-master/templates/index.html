@@ -220,5 +220,18 @@ new Chart(ctx, {
     }
 });
 </script>
+<script>
+// BAR GRAPH
+new Chart(document.getElementById('locationChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Downtown', 'Airport'],
+        datasets: [{
+            label: 'Bookings',
+            data: [{{ downtown }}, {{ airport }}]
+        }]
+    }
+});
+</script>
 </body>
 </html>
