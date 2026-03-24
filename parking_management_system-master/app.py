@@ -102,17 +102,20 @@ def index():
     total_slots = DOWNTOWN_CAPACITY + AIRPORT_CAPACITY
     available = total_slots - occupied
     revenue = sum(b.amount for b in all_bookings)
+    two_wheeler = Booking.query.filter_by(vehicle_type="2-Wheeler").count()
+    four_wheeler = Booking.query.filter_by(vehicle_type="4-Wheeler").count()
 
     return render_template(
-        "index.html",
-        occupied=occupied,
-        available=available,
-        total_slots=total_slots,
-        revenue=revenue,
-        bookings=recent_bookings,
-        admin=session["admin"]
-    )
-
+    "index.html",
+    occupied=occupied,
+    available=available,
+    total_slots=total_slots,
+    revenue=revenue,
+    bookings=recent_bookings,
+    admin=session["admin"],
+    two_wheeler=two_wheeler,
+    four_wheeler=four_wheeler
+)
 
 # -----------------------------
 # Booking Route
